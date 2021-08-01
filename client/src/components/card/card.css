@@ -1,0 +1,39 @@
+#container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px !important;
+  justify-content: space-evenly;
+}
+
+#container > .row {
+  width: 75%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+#container > .row > .column {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#container > .row > .img_column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#container > .row > .column:nth-child(2) {
+  margin-left: -60px;
+}
+
+#container > .row > .column:nth-child(3) {
+  justify-content: center;
+}
+
+#container > .row > .column:nth-child(3) .button {
+  height: 50px;
+}

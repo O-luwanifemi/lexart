@@ -1,0 +1,14 @@
+#navbarScrollingDropdown {
+  width: 150px;
+  display: flex;
+  color: #fff;
+  margin-right: 10px;
+  border-radius: 5px;
+  align-items: center;
+  background-color: #263456;
+  justify-content: space-evenly;
+}
+
+.navbar-nav {
+  flex-direction: row;
+}

@@ -1,0 +1,17 @@
+#header {
+    height: 12vh;
+}
+
+#navbarScroll {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#navbarScroll .dropdown_btns {
+    width: 20rem;
+    display: flex;
+    font-size: 18px;
+    align-items: center;
+    justify-content: space-around;
+}
