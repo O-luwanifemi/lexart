@@ -1,11 +1,12 @@
 #navbarScrollingDropdown {
   width: 150px;
   display: flex;
-  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
   margin-right: 10px;
   border-radius: 5px;
   align-items: center;
-  background-color: #263456;
+  border: 2px solid #263456;
   justify-content: space-evenly;
 }
 
