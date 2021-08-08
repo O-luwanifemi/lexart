@@ -1,7 +1,6 @@
 import axios from 'axios';
 import jsdom from 'jsdom';
 import dotenv from 'dotenv';
-import { Product } from '../models/product.js';
 import createTvInstance from '../helpers/mercadoHelpers/createTvInstance.js';
 import createPhoneInstance from '../helpers/mercadoHelpers/createPhoneInstance.js';
 import createRefrigeratorInstance from '../helpers/mercadoHelpers/createRefrigeratorInstance.js';
@@ -15,6 +14,7 @@ const mercadoController = {
         const url = 'https://celulares.mercadolivre.com.br/#menu=categories';
 
         try {
+            const payload = [];
             const { data } = await axios.get(url);
             const dom = new JSDOM(data);
             const { document } = dom.window;
@@ -23,20 +23,11 @@ const mercadoController = {
             );
 
             for (let element of list) {
-                const productInstance = createPhoneInstance(res, element);
-                const newProduct = new Product(productInstance);
-
-                /////////////////// MIGHT HAVE TO DELETE MANY BEFORE SAVING NEW DATA ///////////////////////////
-                await newProduct.save();
+                const productInstance = await createPhoneInstance(res, element);
+                payload.push(productInstance);
             }
 
-            const phones = await Product.find({ category: 'mobile' });
-
-            if (!phones.length) {
-                return response(res, 400, 'Failed', 'Nothing found');
-            }
-
-            return response(res, 200, 'Success', 'Successful', phones);
+            return response(res, 200, 'Success', 'Successful', payload);
         } catch (error) {
             response(res, 500, 'Failed', error.message);
         }
@@ -47,6 +38,7 @@ const mercadoController = {
             'https://eletronicos.mercadolivre.com.br/televisores/#menu=categories';
 
         try {
+            const payload = [];
             const { data } = await axios.get(url);
             const dom = new JSDOM(data);
             const { document } = dom.window;
@@ -56,19 +48,10 @@ const mercadoController = {
 
             for (let element of list) {
                 const productInstance = await createTvInstance(res, element);
-                const newProduct = new Product(productInstance);
-
-                /////////////////// MIGHT HAVE TO DELETE MANY BEFORE SAVING NEW DATA ///////////////////////////
-                await newProduct.save();
+                payload.push(productInstance);
             }
 
-            const tvs = await Product.find({ category: 'television' });
-
-            if (!tvs.length) {
-                return response(res, 400, 'Failed', 'Nothing found');
-            }
-
-            return response(res, 200, 'Success', 'Successful', tvs);
+            return response(res, 200, 'Success', 'Successful', payload);
         } catch (error) {
             response(res, 500, 'Failed', error.message);
         }
@@ -79,6 +62,7 @@ const mercadoController = {
             'https://lista.mercadolivre.com.br/geladeiras-e-freezers/refrigerator_NoIndex_True#applied_filter_id%3Dcategory%26applied_filter_name%3DCategorias%26applied_filter_order%3D9%26applied_value_id%3DMLB181294%26applied_value_name%3DGeladeiras%26applied_value_order%3D6%26applied_value_results%3D20924%26is_custom%3Dfalse';
 
         try {
+            const payload = [];
             const { data } = await axios.get(url);
             const dom = new JSDOM(data);
             const { document } = dom.window;
@@ -91,21 +75,11 @@ const mercadoController = {
                     res,
                     element
                 );
-                const newProduct = new Product(productInstance);
-
-                /////////////////// MIGHT HAVE TO DELETE MANY BEFORE SAVING NEW DATA ///////////////////////////
-                await newProduct.save();
+                
+                payload.push(productInstance);
             }
 
-            const refigerators = await Product.find({
-                category: 'refrigerator'
-            });
-
-            if (!refigerators.length) {
-                return response(res, 400, 'Failed', 'Nothing found');
-            }
-
-            return response(res, 200, 'Success', 'Successful', refigerators);
+            return response(res, 200, 'Success', 'Successful', payload);
         } catch (error) {
             response(res, 500, 'Failed', error.message);
         }
