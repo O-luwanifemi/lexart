@@ -1,4 +1,4 @@
-# react-node-boilerplate
+# A web-scraping MERN project which scrapes relevant specified contents, based on selected dropdown categories and search input, off of the selected site.
 
 ## SITES
   ## mercadolivre.com.br

@@ -2,7 +2,9 @@ import response from '../response.js';
 
 async function createTvInstance(res, element) {
     try {
-        const photo = await element.querySelector('a .slick-slide > img').src;
+        // const photo = await element.querySelector('a .slick-slide > img').src;
+        constphoto = 'https://i.zst.com.br/thumbs/45/2f/1a/1281934694.jpg';
+        
         const description = await element.querySelector(
             'div.ui-search-result__content-wrapper h2.ui-search-item__title'
         ).textContent;
@@ -17,7 +19,7 @@ async function createTvInstance(res, element) {
             name,
             category,
             description,
-            price,
+            price: 'R$ ' + price,
             source: website,
             imgurl: photo
         };
