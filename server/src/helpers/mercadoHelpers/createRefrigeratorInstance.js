@@ -2,7 +2,9 @@ import response from '../response.js';
 
 async function createRefrigeratorInstance(res, element) {
     try {
-        const photo = await element.querySelector('a .slick-slide > img').src;
+        // const photo = await element.querySelector('a .slick-slide > img').src;
+        const photo = 'https://i.zst.com.br/thumbs/51/33/12/1812981852.jpg';
+
         const description = await element.querySelector(
             'div.ui-search-result__content-wrapper h2.ui-search-item__title'
         ).textContent;
@@ -18,7 +20,7 @@ async function createRefrigeratorInstance(res, element) {
             name,
             category,
             description,
-            price,
+            price: 'R$ ' + price,
             source: website,
             imgurl: photo
         };

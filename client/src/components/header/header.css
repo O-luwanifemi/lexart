@@ -1,33 +1,96 @@
 #header {
-    height: 12vh;
+    min-height: 12vh;
+    min-width: 100vw;
+    overflow-x: hidden;
 }
 
 #navbarScroll {
+    width: 100%;
+    height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 
-#navbarScroll .dropdown_btns {
-    width: 20rem;
-    display: flex;
-    font-size: 18px;
+@media screen and (min-width: 700px) {
+  #navbarScroll {
+    flex-direction: row;
     align-items: center;
     justify-content: space-around;
+  }
+}
+
+
+#navbarScroll .dropdown_btns {
+    font-size: 18px;
+}
+
+@media screen and (min-width: 700px) {
+  #navbarScroll .dropdown_btns {
+    width: 20rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
 }
 
 #navbarScrollingDropdown {
   width: 150px;
-  display: flex;
   font-size: 17px;
   cursor: pointer;
-  margin-right: 10px;
-  border-radius: 5px;
-  align-items: center;
-  border: 2px solid #263456;
-  justify-content: space-evenly;
+  background-color: #f8f9fa;
 }
 
-.navbar-nav {
-  flex-direction: row;
+@media screen and (min-width: 700px) {
+  #navbarScrollingDropdown {
+    display: flex;
+    height: 45px;
+    margin-right: 12px;
+    border-radius: 5px;
+    align-items: center;
+    border: 2px solid #263456;
+    justify-content: space-evenly;
+  }
+}
+
+
+#navbarScrollingDropdown:first-child {
+  margin-bottom: .6rem;
+}
+
+@media screen and (min-width: 700px) {
+  #navbarScrollingDropdown:first-child {
+    margin-bottom: 0;
+  }
+}
+
+
+.d-flex {
+  width: 100% !important;
+  max-width: 700px;
+  margin-top: .1rem !important;
+}
+
+@media screen and (min-width: 701px) {
+  .d-flex {
+    max-width: 400px;
+    margin-top: 0 !important;
+  } 
+}
+
+
+.d-flex > button {
+  width: 150px;
+  margin-left: .8rem;
+  transition: all .5s ease-in;
+  background-color: #000 !important;
+}
+
+.d-flex > button:hover {
+  border: 1px solid #263456;
+  color: #000 !important;
+  background-color: transparent !important;
 }

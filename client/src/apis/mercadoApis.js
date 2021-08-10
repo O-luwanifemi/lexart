@@ -6,8 +6,14 @@ const { BASEURL } = config;
 export const getMercado = async endpoint => {
     try {
         const response = await axios.get(`${BASEURL}/mercado/${endpoint}`);
-        return response.data;
+
+        if(response && Object.keys(response).length) {
+            return response.data;
+        }
+        
+        throw new Error();
     } catch (err) {
+        alert(err.message);
         return err.message;
     }
 };

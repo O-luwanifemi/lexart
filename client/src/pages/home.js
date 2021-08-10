@@ -2,17 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Card from '../components/card/card';
+import Loader from '../components/loader/loader';
 import Header from '../components/header/header';
-import { getBuscape } from '../apis/buscapeApis';
-import { getMercado } from '../apis/mercadoApis';
-import {
-    getProductsAsync,
-    saveProductsAsync
-} from '../redux/actions/storeActions';
-import setEndPoint from '../utils/setEndpoint';
-import getSearchedInput from '../utils/getSearchedInput';
+import { getProductsAsync } from '../redux/actions/storeActions';
+import processResponse from '../utils/processResponse';
 
 const Home = () => {
+    const [isLoading, setIsLoading] = useState(false);
     // Handles dropdown menus and search input states
     const [stateValues, setStateValues] = useState({
         categorySelect: 'Categories',
@@ -20,15 +16,12 @@ const Home = () => {
         searchInputValue: ''
     });
 
-    // Handles search history fetched from store
-    const [searchHistory, setSearchHistory] = useState([]);
-
-    // Stores search results rendered on UI
+    // Stores CURRENT search results rendered on UI
     const [searchedProducts, setSearchedProducts] = useState([]);
 
     const dispatch = useDispatch();
 
-    // Updates store on component load
+    // Gets products from DB, and keeps in store
     useEffect(() => {
         dispatch(getProductsAsync());
     }, [dispatch]);
@@ -39,6 +32,9 @@ const Home = () => {
     );
 
     const handleChange = event => {
+        event.preventDefault();
+        event.stopPropagation();
+
         const { name, value } = event.target;
         setStateValues({ ...stateValues, [name]: value });
     };
@@ -46,9 +42,6 @@ const Home = () => {
     const handleSubmit = async event => {
         event.preventDefault();
         event.stopPropagation();
-
-        ///////////////////// TO HAVE LOADER SLOTTED IN HERE ///////////////////////
-        console.log('IT HAS STARTED NOW!!!!');
 
         const { categorySelect, siteSelect, searchInputValue } = stateValues;
 
@@ -60,76 +53,63 @@ const Home = () => {
             return alert('Please type in your search word or phrase');
         }
 
+        ///////////////////// TO HAVE LOADER SLOTTED IN HERE ///////////////////////
+        setIsLoading(true);
+
         ////////////// IF NOTHING CAME FROM THE DATABASE TO STORE, I.E DB IS EMPTY /////////////
         if (!storeProducts.length) {
-            const response =
-                siteSelect === 'Mercado Livre'
-                    ? await getMercado(setEndPoint(categorySelect))
-                    : siteSelect === 'Buscape'
-                    ? await getBuscape(setEndPoint(categorySelect))
-                    : '';
-
-            if (Object.keys(response).length) {
-                const payload = getSearchedInput(response, searchInputValue);
-                
-                if (payload.length) {
-                    // Sends payload to the DB, and store
-                    dispatch(saveProductsAsync(payload));
-
-                    // Updates component state for search History till component reloads
-                    setSearchHistory([...searchHistory, ...payload]);
-
-                    // Updates state component that renders results to the UI
-                    return setSearchedProducts([...payload]);
-                }
-
-                return alert('Oops! Nothing to show. Sorry!');
-            }
+            const res = await processResponse(
+                siteSelect,
+                categorySelect,
+                searchInputValue,
+                dispatch,
+                setSearchedProducts
+            );
+            setIsLoading(false);
+            return res;
         }
 
-        console.log('ARRAY', storeProducts);
+        ////////////// IF SOMETHING CAME FROM THE DATABASE TO STORE, Check through DB products first
+        const payload = storeProducts.filter(product => {
+            if (categorySelect === 'TV') {
+                return (
+                    product.category === 'television' &&
+                    product.source.includes(siteSelect.toLowerCase()) &&
+                    product.description
+                        .toLowerCase()
+                        .includes(searchInputValue.toLowerCase())
+                );
+            }
 
-        const payload = storeProducts.filter(
-            product =>
-                product.category === categorySelect &&
+            return (
+                product.category === categorySelect.toLowerCase() &&
+                product.source.includes(siteSelect.toLowerCase()) &&
                 product.description
                     .toLowerCase()
                     .includes(searchInputValue.toLowerCase())
-        );
+            );
+        });
 
-        if(payload.length) {
-            // Updates component state for search History till component reloads
-            setSearchHistory([...searchHistory, ...payload]);
-
-            // Updates state component that renders results to the UI
-            return setSearchedProducts([...payload]);
-        }
-
-        const response =
-            siteSelect === 'Mercado Livre'
-                ? await getMercado(setEndPoint(categorySelect))
-                : siteSelect === 'Buscape'
-                ? await getBuscape(setEndPoint(categorySelect))
-                : '';
-
-        if (Object.keys(response).length) {
-            const payload = getSearchedInput(response, searchInputValue);
-            
-            if (payload.length) {
-                // Sends payload to the DB, and store
-                dispatch(saveProductsAsync(payload));
-
-                // Updates component state for search History till component reloads
-                setSearchHistory([...searchHistory, ...payload]);
-
+        if (payload.length) {
+            setTimeout(() => {
+                setIsLoading(false);
                 // Updates state component that renders results to the UI
                 return setSearchedProducts([...payload]);
-            }
-
-            return alert('Oops! Nothing to show. Sorry!');
+            }, 2000)
+        } else {
+            // If filter returned no match
+            const res = await processResponse(
+                siteSelect,
+                categorySelect,
+                searchInputValue,
+                dispatch,
+                setSearchedProducts
+            );
+            setIsLoading(false);
+            return res;
         }
     };
- 
+
     return (
         <div className="main_block">
             <Header
@@ -139,15 +119,21 @@ const Home = () => {
             />
 
             <section>
-                {searchedProducts.map(product => (
-                    <Card
-                        key={Math.random()}
-                        name={product.name}
-                        description={product.description}
-                        price={product.price}
-                        imgSrc={product.imgurl}
-                    />
-                ))}
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    searchedProducts.map(product => (
+                        <Card
+                            key={Math.random()}
+                            name={product.name}
+                            description={product.description}
+                            price={product.price}
+                            imgSrc={product.imgurl}
+                            category={product.category}
+                            source={product.source}
+                        />
+                    ))
+                )}
             </section>
         </div>
     );

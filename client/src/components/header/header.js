@@ -28,8 +28,8 @@ const Header = ({ selectedValue, handleSubmit, handleChange }) => {
                         onChange={handleChange}
                     >
                         <option value="Site">Site</option>
-                        <option value="Mercado Livre">Mercado Livre</option>
                         <option value="Buscape">Buscape</option>
+                        <option value="MercadoLivre">Mercado Livre</option>
                     </Form.Select>
                 </Nav>
 

@@ -1,36 +1,26 @@
-import { Row, Col, Container, Button } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 
 import './card.css';
 
-const Card = ({ name, description, price, imgSrc }) => {
+const Card = ({ name, description, price, imgSrc, category, source }) => {
     return (
         <>
             <Container id="container">
                 <Row className="row">
                     <Col className="column img_column">
                         <div className="img_block" style={{ width: '150px' }}>
-                            <img
-                                src={imgSrc}
-                                alt="cartoon"
-                                width="100%"
-                            />
+                            <img src={imgSrc} alt={name} width="100%" />
                         </div>
                     </Col>
 
                     <Col className="column">
-                        <h1>{name}</h1>
+                        <h3>{name}</h3>
                         <p>{description}</p>
-                        <h3>{price}</h3>
-                    </Col>
-
-                    <Col className="column">
-                        <Button
-                            className="button"
-                            variant="bg bg-primary text-light"
-                            size="lg"
-                        >
-                            Search the web
-                        </Button>
+                        <h1>{price}</h1>
+                        <div className="catSite_section">
+                            <p>{category}</p>
+                            <p>{source}</p>
+                        </div>
                     </Col>
                 </Row>
             </Container>
