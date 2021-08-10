@@ -1,6 +1,6 @@
 import app from './server.js';
 import { dbConnection } from './src/database/db.js';
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8500;
 
 dbConnection.getConnect();
 

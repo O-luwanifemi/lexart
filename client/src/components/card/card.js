@@ -2,7 +2,7 @@ import { Row, Col, Container, Button } from 'react-bootstrap';
 
 import './card.css';
 
-const Card = ({ primaryText, secondaryText, price }) => {
+const Card = ({ name, description, price, imgSrc }) => {
     return (
         <>
             <Container id="container">
@@ -10,7 +10,7 @@ const Card = ({ primaryText, secondaryText, price }) => {
                     <Col className="column img_column">
                         <div className="img_block" style={{ width: '150px' }}>
                             <img
-                                src="https://cdn.pixabay.com/photo/2021/01/29/08/10/musician-5960112_960_720.jpg"
+                                src={imgSrc}
                                 alt="cartoon"
                                 width="100%"
                             />
@@ -18,8 +18,8 @@ const Card = ({ primaryText, secondaryText, price }) => {
                     </Col>
 
                     <Col className="column">
-                        <h1>{primaryText}</h1>
-                        <p>{secondaryText}</p>
+                        <h1>{name}</h1>
+                        <p>{description}</p>
                         <h3>{price}</h3>
                     </Col>
 
